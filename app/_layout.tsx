@@ -1,18 +1,18 @@
-import '../polyfills'
+import '../polyfills';
 
 // Import the PrivyProvider
-import {PrivyProvider} from '@privy-io/expo';
+import { PrivyProvider } from '@privy-io/expo';
 
-import { SplashScreen, Stack } from 'expo-router'
-import { useColorScheme } from 'react-native'
-import { TamaguiProvider } from 'tamagui'
+import { SplashScreen, Stack } from 'expo-router';
+import { useColorScheme } from 'react-native';
+import { TamaguiProvider } from 'tamagui';
 
 //import '../tamagui-web.css'
 
 
-import { config } from '../tamagui.config'
-import { useFonts } from 'expo-font'
-import { useEffect } from 'react'
+import { config } from '../tamagui.config';
+import { useFonts } from 'expo-font';
+import { useEffect } from 'react';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,26 +51,26 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme()
 
   return (
-    <PrivyProvider appId={process.env.EXPO_PUBLIC_PRIVY_ID as string}>
+    <PrivyProvider appId={process.env.EXPO_PUBLIC_PRIVY_ID as string}
+      clientId={process.env.EXPO_PUBLIC_CLIENT_ID as string}
+    >
       <TamaguiProvider config={config} defaultTheme={colorScheme as any}>
 
-        
+        <Stack>
 
-          <Stack>
-            
-            {/* Privy Login Screen */}
-            <Stack.Screen name="login" options={{}} />
+          {/* Privy Login Screen */}
+          <Stack.Screen name="login" options={{}} />
 
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> 
-            
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-            {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
-          </Stack>
+
+          {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
+        </Stack>
 
 
       </TamaguiProvider>
     </PrivyProvider>
 
-    
+
   )
 }
