@@ -17,7 +17,7 @@ import { verifyEIP6492Signature } from '@zerodev/sdk';
 
 // Viem
 import { encodeFunctionData, hashMessage, parseAbi, parseUnits, zeroAddress, createPublicClient, http } from 'viem';
-import {sepolia} from "viem/chains";
+import {base} from "viem/chains";
 
 // Expo
 import { router } from 'expo-router';
@@ -25,7 +25,7 @@ import { Toast, ToastViewport, useToastController, useToastState, ToastProvider 
 
 
 const publicClient = createPublicClient({
-  chain: sepolia,
+  chain: base,
   transport: http(),
 });
 
@@ -76,7 +76,7 @@ export default function TabOneScreen() {
       console.log("User Operation Hash:", userOpHash);
       console.log(
         "View your tx:",
-        `https://jiffyscan.xyz/userOpHash/${userOpHash}?network=sepolia`
+        `https://jiffyscan.xyz/userOpHash/${userOpHash}?network=base`
       );
       toast.show('User Op Sent!', {
         message: 'You just sent a user operation!',
@@ -135,7 +135,7 @@ export default function TabOneScreen() {
     console.log("NFT User Operation Hash:", nftOp);
     console.log(
       "View your tx:",
-      `https://jiffyscan.xyz/userOpHash/${nftOp}?network=sepolia`
+      `https://jiffyscan.xyz/userOpHash/${nftOp}?network=base`
     );  
     toast.show('NFT Minted!!', {
       message: 'You just minted an NFT gas free!',
@@ -193,7 +193,7 @@ export default function TabOneScreen() {
 
             <YStack gap="$2" mb="$4">
               <H4>User:</H4>
-              <Paragraph> {user?.linked_accounts[2].name} </Paragraph>
+              {/* <Paragraph> {user?.linked_accounts[2]?.name} </Paragraph> */}
             </YStack>
            
             <YStack gap="$2" mb="$4" alignItems="center" >

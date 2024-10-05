@@ -1,16 +1,16 @@
 import '../polyfills';
 
 // Permissionless
-import { providerToSmartAccountSigner } from "permissionless";
-import { ENTRYPOINT_ADDRESS_V07 } from "permissionless";
+import { ENTRYPOINT_ADDRESS_V06, providerToSmartAccountSigner } from "permissionless";
 
 // Viem
 import { EIP1193Provider, PublicClient, http } from "viem";
-import { sepolia } from "viem/chains";
+import { base } from "viem/chains";
 
 // ZeroDev
 import { signerToEcdsaValidator } from "@zerodev/ecdsa-validator";
 import {
+  SponsorUserOperationParameters,
   createKernelAccount,
   createKernelAccountClient,
   createZeroDevPaymasterClient,
@@ -18,6 +18,7 @@ import {
 
 // react
 import { useEffect, useState } from "react";
+import { ENTRYPOINT_ADDRESS_V06_TYPE } from 'permissionless/_types/types';
 
 
 const useCreateKernel = (provider: EIP1193Provider, publicClient: PublicClient) => {
@@ -28,8 +29,8 @@ const useCreateKernel = (provider: EIP1193Provider, publicClient: PublicClient) 
   const BUNDLER_RPC = `https://rpc.zerodev.app/api/v2/bundler/${process.env.EXPO_PUBLIC_ZERODEV_ID}`;
   const PAYMASTER_RPC = `https://rpc.zerodev.app/api/v2/paymaster/${process.env.EXPO_PUBLIC_ZERODEV_ID}`;
 
-  const chain = sepolia;
-  const entryPoint = ENTRYPOINT_ADDRESS_V07;
+  const chain = base;
+  const entryPoint = ENTRYPOINT_ADDRESS_V06;
 
   useEffect(() => {
     if (!provider || !publicClient) return;
@@ -44,6 +45,7 @@ const useCreateKernel = (provider: EIP1193Provider, publicClient: PublicClient) 
         const ecdsaValidator = await signerToEcdsaValidator(publicClient, {
           signer,
           entryPoint,
+          kernelVersion: '0.2.4',
         });
         console.log("Created Ecdsa Validator:", ecdsaValidator);
 
@@ -53,6 +55,7 @@ const useCreateKernel = (provider: EIP1193Provider, publicClient: PublicClient) 
             sudo: ecdsaValidator,
           },
           entryPoint,
+          kernelVersion: '0.2.4',
         });
         console.log("Created Kernel Account:", kernelAccount);
 
@@ -64,14 +67,16 @@ const useCreateKernel = (provider: EIP1193Provider, publicClient: PublicClient) 
           bundlerTransport: http(BUNDLER_RPC),
           middleware: {
             sponsorUserOperation: async ({ userOperation }) => {
-              const zerodevPaymaster = createZeroDevPaymasterClient({
-                chain,
-                entryPoint,
+              const paymasterClient = createZeroDevPaymasterClient({
+                chain:base,
                 transport: http(PAYMASTER_RPC),
+                entryPoint: ENTRYPOINT_ADDRESS_V06,
               });
-              return zerodevPaymaster.sponsorUserOperation({
-                userOperation,
-                entryPoint,
+              const _userOperation =
+                userOperation as SponsorUserOperationParameters<ENTRYPOINT_ADDRESS_V06_TYPE>["userOperation"];
+              return paymasterClient.sponsorUserOperation({
+                userOperation: _userOperation,
+                entryPoint: ENTRYPOINT_ADDRESS_V06,
               });
             },
           },

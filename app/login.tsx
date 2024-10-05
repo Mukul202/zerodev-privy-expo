@@ -57,7 +57,7 @@ export default function Login() {
     // create wallet in backend
     // use proper try catch
     try {
-      const response = await fetch('https://0535-2402-e280-2145-0-b02e-c30f-f5db-dc05.ngrok-free.app/', {
+      const response = await fetch('https://869b-2601-8c-4e00-9a30-5904-540-5d95-965b.ngrok-free.app', {
         body: JSON.stringify(emailObject),
         method: "POST",
         headers: {
